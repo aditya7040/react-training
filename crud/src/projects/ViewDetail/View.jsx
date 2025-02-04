@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
+import "./View.css"
 export default function ViewDetails() {
   const params = useParams()
   console.log(params, 'params  ');
@@ -18,17 +18,13 @@ export default function ViewDetails() {
   return (
 
 
-    <div>
-      {
-        <ul>
-          <li>{data.firstname}</li>
-          <li>{data.city}</li>
-          <li>{data.email}</li>
-          <li>{data.username}</li>
-
-        </ul>
-      }
-
-    </div>
+    <div className="user-card">
+    <ul className="user-info">
+      <li><strong>First Name:</strong> {data.firstname}</li>
+      <li><strong>City:</strong> {data.city}</li>
+      <li><strong>Email:</strong> {data.email}</li>
+      <li><strong>Username:</strong> {data.username}</li>
+    </ul>
+  </div>
   );
 }

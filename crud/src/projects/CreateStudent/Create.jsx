@@ -8,22 +8,20 @@ export default function CreateStudent() {
   const isEdit = params?.id ? true : false;
   const [data, satData] = useState([]);
 
-  if (isEdit) {
-    // const api = `https://65e7470053d564627a8e6689.mockapi.io/crud/${params.id}`;
+  useEffect(() => {
+    const api = `https://65e7470053d564627a8e6689.mockapi.io/crud/${params.id}`;
 
-    // useEffect(() => {
-    //   fetch(api)
-    //     .then((res) => res.json())
-    //     .then((json) => satData(json));
-    // }, []);
+    fetch(api)
+      .then((res) => res.json())
+      .then((json) => satData(json));
+  }, []);
 
-    // Populate form with editData when it changes
-    // useEffect(() => {
-    //   if (data) {
-    //     setFormData(data);
-    //   }
-    // }, [data]);
-  }
+  //Populate form with editData when it changes
+  useEffect(() => {
+    if (data) {
+      setFormData(data);
+    }
+  }, [data]);
 
   // console.log(data,'data  data  data  data')
 
@@ -42,42 +40,43 @@ export default function CreateStudent() {
     });
   };
   const handleSubmit = (event) => {
-    console.log(isEdit,'isEdit isEdit  isEdit ');
-
-    if (!isEdit) {
+    event.preventDefault(); 
+    console.log(isEdit, "isEdit isEdit  isEdit ");
+    if (isEdit) {
+      fetch(`https://65e7470053d564627a8e6689.mockapi.io/crud/${params.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      setTimeout(() => {
+        navigate("/");
+      }, 100);
+    } else {
       fetch("https://65e7470053d564627a8e6689.mockapi.io/crud", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
+      }).catch((error) => {
+        console.error("Error submitting data:", error);
       });
+      setTimeout(() => {
+        navigate("/");
+      }, 100);
     }
-    if (isEdit) {
-        
-      fetch(`https://65e7470053d564627a8e6689.mockapi.io/crud/:${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      }).then(val=>{
-        console.log(val,'val  val  val  val');
-        
-      });
-    }
-    // console.log(formData);
- 
-    // navigate("/");
   };
-
 
   return (
     <div className="container">
       <div className="container mt-5">
         <div className="card shadow p-4">
-          <h2 className="text-center mb-4">Create Student</h2>
-          <form onSubmit={ handleSubmit}>
+          <h2 className="text-center mb-4">
+            {isEdit ? "Edit Student" : "create Student"}
+          </h2>
+          <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label for="firstName" className="form-label">
                 First Name

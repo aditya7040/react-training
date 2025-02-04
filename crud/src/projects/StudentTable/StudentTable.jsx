@@ -11,7 +11,7 @@ export const StudentTable = () => {
 
   const [data, setData] = useState([]);
  
-  useEffect(() => {
+  const fetchData=()=>{
     setLoading(true); // Set loading to true before fetching
     fetch(api)
       .then((res) => res.json())
@@ -23,7 +23,10 @@ export const StudentTable = () => {
         console.error("Error fetching data:", error);
         setLoading(false); // Ensure loading is false even if there's an error
       });
-  }, []); // Empty dependency array ensures it runs only once on mount
+  }
+  useEffect(() => {
+    fetchData()
+  }, []); 
 
 
   const navigate = useNavigate();
@@ -35,6 +38,23 @@ export const StudentTable = () => {
     navigate(`/student/edit/${id}`)
   }
 
+  const deleteStudent = async (id) => {
+    const isConfirm = confirm("Are you sure?");
+    if (isConfirm) {
+      try {
+        // Wait for the DELETE request to complete
+        await fetch(`https://65e7470053d564627a8e6689.mockapi.io/crud/${id}`, {
+          method: "DELETE"
+        });
+        
+        // Now fetch the updated data
+        fetchData();
+      } catch (error) {
+        console.error("Error deleting student:", error);
+      }
+    }
+  };
+  
   return (
 
     <div style={{ textAlign: "center", padding: "20px" }}>
@@ -60,7 +80,7 @@ export const StudentTable = () => {
             </thead>
             <tbody>
               {data.map((studentData) => (
-                <tr>
+                <tr onClick={() => goToView(studentData.id)} >
                   <td>{studentData.id}</td>
 
                   <td>{studentData.firstname}</td>
@@ -70,26 +90,14 @@ export const StudentTable = () => {
 
                   <td>
                     <div className="d-flex gap-2 justify-content-center">
-                      <button onClick={() => goToView(studentData.id)} className="btn btn-sm btn-primary">View</button>
                       <button onClick={() => goToEdit(studentData.id)}  className="btn btn-sm btn-warning text-white">
                         Edit
                       </button>
-                      <button className="btn btn-sm btn-danger">Delete</button>
+                      <button onClick={()=> deleteStudent(studentData.id)} className="btn btn-sm btn-danger">Delete</button>
                     </div>
                   </td>
                 </tr>
               ))}
-              <tr>
-                <td>
-                  <div className="d-flex gap-2 justify-content-center">
-                    <button className="btn btn-sm btn-primary">View</button>
-                    <button className="btn btn-sm btn-warning text-white">
-                      Edit
-                    </button>
-                    <button className="btn btn-sm btn-danger">Delete</button>
-                  </div>
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>

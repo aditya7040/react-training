@@ -1,0 +1,37 @@
+/* Styling the container */
+.user-card {
+    background-color: #f4f4f9; 
+    border-radius: 8px; 
+    padding: 20px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    width: 300px; 
+    margin: 10px;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* List styling */
+  .user-info {
+    list-style-type: none; 
+    padding: 0;
+  }
+  
+  .user-info li {
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd; 
+  }
+  
+  .user-info li:last-child {
+    border-bottom: none;
+  }
+  
+  /* Strong styling for labels */
+  .user-info li strong {
+    color: #333;
+  }
+  
+  /* Optional: Hover effect for list items */
+  .user-info li:hover {
+    background-color: #e9ecef; 
+    cursor: pointer;
+  }
+  
